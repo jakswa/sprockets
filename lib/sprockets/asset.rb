@@ -140,13 +140,15 @@ module Sprockets
 
       FileUtils.mkdir_p File.dirname(filename)
 
-      File.open("#{filename}+", 'wb') do |f|
-        if options[:compress]
+      if options[:compress]
+        File.open("#{filename}+", 'wb') do |f|
           # Run contents through `Zlib`
           gz = Zlib::GzipWriter.new(f, Zlib::BEST_COMPRESSION)
           gz.write to_s
           gz.close
-        else
+        end
+      else
+        File.open("#{filename}+", 'w:UTF-8') do |f|
           # Write out as is
           f.write to_s
           f.close
